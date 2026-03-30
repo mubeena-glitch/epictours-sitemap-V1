@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EpicTours Sitemap Dashboard</title>
+    <title>EpicTours Sitemap Dashboard - Client Review v3</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f3ff; color: #333; }
@@ -23,444 +23,319 @@
         .page-status { font-size: 0.7rem; margin-left: auto; padding: 0.25rem 0.5rem; border-radius: 3px; background: rgba(255,255,255,0.2); }
         
         .main-content { padding: 2rem; overflow-y: auto; }
-        .page-header { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(147,84,255,0.08); display: flex; justify-content: space-between; align-items: center; }
-        .page-title { font-size: 1.5rem; font-weight: 700; color: #7c3aed; }
-        .page-approve-btn { padding: 0.75rem 1.5rem; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
+        .tab-buttons { background: white; border-radius: 12px; padding: 1rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(147,84,255,0.08); display: flex; gap: 1rem; overflow-x: auto; }
+        .tab-btn { padding: 0.75rem 1.5rem; border: 2px solid #e9ddff; background: transparent; color: #7c3aed; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; white-space: nowrap; }
+        .tab-btn.active { background: #7c3aed; color: white; border-color: #7c3aed; }
+        
+        .page-header { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(147,84,255,0.08); display: flex; justify-content: space-between; align-items: center; }
+        .page-title { font-size: 1.5rem; font-weight: 700; color: #7c3aed; display: flex; align-items: center; gap: 1rem; }
+        .page-approval { display: flex; align-items: center; gap: 1rem; }
+        .page-approve-btn { padding: 0.75rem 1.5rem; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; font-size: 0.9rem; }
         .page-approve-btn:hover { background: #059669; }
-        .page-approve-btn.approved { background: #065f46; cursor: default; }
+        .page-approve-btn.approved { background: #065f46; }
         
         .sections-container { display: flex; flex-direction: column; gap: 1.5rem; }
         .section-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(147,84,255,0.08); border: 1.5px solid #e9ddff; }
         .section-header { background: #f9f7ff; padding: 1.25rem; border-bottom: 1px solid #e9ddff; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
-        .section-title { font-size: 1rem; font-weight: 600; color: #7c3aed; }
-        .section-icon { font-size: 1.2rem; transition: transform 0.3s ease; }
+        .section-title { font-size: 1rem; font-weight: 600; color: #7c3aed; display: flex; align-items: center; gap: 0.75rem; flex: 1; }
+        .section-actions { display: flex; gap: 0.5rem; }
+        .action-btn { padding: 0.5rem; border: none; border-radius: 6px; cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+        .btn-toggle { background: #e9ddff; color: #7c3aed; }
+        .btn-remove { background: #fee2e2; color: #991b1b; }
+        
         .section-content { padding: 1.5rem; display: none; }
-        .section-content.expanded { display: block; }
+        .section-content.expanded { display: block; animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .section-description { color: #555; line-height: 1.8; margin-bottom: 1rem; font-size: 0.95rem; }
+        .section-items { background: #f9f7ff; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+        .section-items ul { margin: 0; padding-left: 1.5rem; }
+        .section-items li { margin: 0.5rem 0; color: #555; font-size: 0.9rem; }
+        
+        .feedback-box { background: #f9f7ff; border: 1px solid #e9ddff; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+        .feedback-label { font-size: 0.85rem; font-weight: 600; color: #7c3aed; margin-bottom: 0.5rem; display: block; }
+        .feedback-textarea { width: 100%; padding: 0.75rem; border: 1px solid #e9ddff; border-radius: 6px; font-family: 'Poppins', sans-serif; font-size: 0.85rem; min-height: 80px; resize: vertical; }
+        .feedback-textarea:focus { outline: none; border-color: #9354ff; box-shadow: 0 0 0 3px rgba(147,84,255,0.1); }
+        
+        .approval-buttons { display: flex; gap: 0.75rem; margin-top: 1rem; }
+        .btn-approve { padding: 0.6rem 1.2rem; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif; font-size: 0.85rem; }
+        .btn-approve:hover { background: #059669; }
+        .btn-approve.approved { background: #065f46; }
+        
+        .add-section-panel { background: white; border-radius: 12px; padding: 1.5rem; margin-top: 2rem; box-shadow: 0 2px 8px rgba(147,84,255,0.08); border: 2px dashed #e9ddff; }
+        .add-section-title { font-size: 1rem; font-weight: 600; color: #7c3aed; margin-bottom: 1rem; }
+        .add-section-form { display: flex; flex-direction: column; gap: 1rem; max-width: 500px; }
+        .form-input { padding: 0.75rem; border: 1px solid #e9ddff; border-radius: 6px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; }
+        .form-input:focus { outline: none; border-color: #9354ff; box-shadow: 0 0 0 3px rgba(147,84,255,0.1); }
+        .add-btn { background: #10b981; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; border: none; font-family: 'Poppins', sans-serif; }
+        .add-btn:hover { background: #059669; }
         
         .visual-sitemap { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(147,84,255,0.08); }
         .visual-title { font-size: 1.2rem; font-weight: 600; color: #7c3aed; margin-bottom: 1.5rem; }
-        .tree-structure { font-family: 'Courier New', monospace; font-size: 0.75rem; color: #333; line-height: 1.5; background: #f9f7ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #9354ff; overflow-x: auto; white-space: pre; max-height: 600px; overflow-y: auto; }
+        .sitemap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
+        .page-node { padding: 1rem; border-radius: 8px; text-align: center; font-weight: 600; font-size: 0.85rem; transition: all 0.3s ease; border: 2px solid #e9ddff; }
+        .page-node.pending { background: #fef3c7; color: #92400e; }
+        .page-node.approved { background: #dcfce7; color: #065f46; border-color: #10b981; }
+        .page-node.partial { background: #e0e7ff; color: #3730a3; border-color: #6366f1; }
+        
+        .summary-section { background: white; border-radius: 12px; padding: 2rem; margin-top: 2rem; box-shadow: 0 2px 8px rgba(147,84,255,0.08); }
+        .summary-title { font-size: 1.2rem; font-weight: 600; color: #7c3aed; margin-bottom: 1.5rem; }
+        .summary-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: #f9f7ff; padding: 1rem; border-radius: 8px; text-align: center; border-left: 4px solid #9354ff; }
+        .stat-value { font-size: 1.8rem; font-weight: 700; color: #7c3aed; }
+        .stat-label { font-size: 0.8rem; color: #555; margin-top: 0.25rem; }
+        
+        .progress-bar { background: #e9ddff; border-radius: 8px; height: 20px; overflow: hidden; margin-top: 1rem; }
+        .progress-fill { background: linear-gradient(90deg, #10b981 0%, #059669 100%); height: 100%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; font-weight: 600; }
         
         .action-buttons { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
-        .btn-primary { background: #7c3aed; color: white; padding: 1rem 2rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
+        .btn-primary { background: #7c3aed; color: white; padding: 1rem 2rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif; font-size: 1rem; }
         .btn-primary:hover { background: #6d28d9; }
-        .btn-primary:disabled { background: #d0d5dd; cursor: not-allowed; }
-        .btn-secondary { background: transparent; color: #7c3aed; padding: 1rem 2rem; border: 2px solid #7c3aed; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
-        .btn-secondary:hover { background: #f0e9ff; }
         
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
         .modal.show { display: flex; }
         .modal-content { background: white; border-radius: 12px; padding: 2rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
         .modal-title { font-size: 1.5rem; font-weight: 700; color: #7c3aed; margin-bottom: 1rem; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-label { display: block; font-weight: 600; color: #7c3aed; margin-bottom: 0.5rem; }
-        textarea { width: 100%; padding: 0.75rem; border: 1px solid #e9ddff; border-radius: 6px; font-family: 'Poppins', sans-serif; min-height: 100px; resize: vertical; }
-        textarea:focus { outline: none; border-color: #9354ff; box-shadow: 0 0 0 3px rgba(147,84,255,0.1); }
-        
-        .success-msg { background: #dcfce7; color: #065f46; padding: 1rem; border-radius: 6px; border-left: 4px solid #10b981; display: none; margin-bottom: 1rem; font-weight: 600; }
-        .success-msg.show { display: block; }
-        
-        @media (max-width: 768px) {
-            .dashboard { grid-template-columns: 1fr; }
-            .sidebar { height: auto; position: relative; }
-            .page-header { flex-direction: column; gap: 1rem; }
-        }
+        .modal-text { color: #555; line-height: 1.8; margin-bottom: 1.5rem; }
     </style>
 </head>
 <body>
     <div class="dashboard">
-        <!-- SIDEBAR -->
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">NEXA Digital</div>
                 <div class="sidebar-client">👤 EpicTours</div>
-                <div class="sidebar-subtitle">Sitemap Approval</div>
+                <div class="sidebar-subtitle">Sitemap v3</div>
             </div>
             <ul class="sidebar-menu" id="pageMenu"></ul>
         </div>
 
-        <!-- MAIN CONTENT -->
         <div class="main-content">
-            <div class="success-msg" id="successMsg"></div>
-
-            <!-- CURRENT PAGE -->
-            <div id="pageContent"></div>
-
-            <!-- VISUAL TREE SUMMARY -->
-            <div class="visual-sitemap" id="visualSummary" style="display: none;">
-                <div class="visual-title">📊 Sitemap Structure - Tree View</div>
-                <div class="tree-structure" id="treeView"></div>
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('review')">📝 Review Pages</button>
+                <button class="tab-btn" onclick="switchTab('visual')">🗺️ Visual Sitemap</button>
+                <button class="tab-btn" onclick="switchTab('summary')">📊 Summary</button>
             </div>
-
-            <!-- ACTION BUTTONS -->
-            <div class="action-buttons" id="actionSection" style="display: none;">
-                <button class="btn-primary" id="submitBtn" onclick="submitForReview()" disabled>📤 Submit for Review</button>
-                <button class="btn-secondary" onclick="openResubmitModal()">📝 Resubmit Changes</button>
+            
+            <div id="reviewTab" class="tab-content">
+                <div id="pageContent"></div>
+            </div>
+            
+            <div id="visualTab" class="tab-content" style="display: none;">
+                <div class="visual-sitemap">
+                    <div class="visual-title">Your Complete Sitemap (Color = Approval Status)</div>
+                    <div class="sitemap-grid" id="sitemapGrid"></div>
+                </div>
+            </div>
+            
+            <div id="summaryTab" class="tab-content" style="display: none;">
+                <div class="summary-section">
+                    <div class="summary-title">Review Summary</div>
+                    <div class="summary-stats" id="summaryStats"></div>
+                    <div style="margin-top: 2rem;">
+                        <h3 style="color: #7c3aed; font-size: 1rem; margin-bottom: 1rem;">Overall Progress</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%">0%</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-primary" onclick="submitReview()">✅ Submit Review</button>
+                        <button class="btn-primary" style="background: #6b7280;" onclick="downloadCSV()">📥 Download CSV</button>
+                        <button class="btn-primary" style="background: #6b7280;" onclick="downloadJSON()">📦 Download JSON</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- RESUBMIT MODAL -->
-    <div class="modal" id="resubmitModal">
+    <div class="modal" id="successModal">
         <div class="modal-content">
-            <div class="modal-title">📝 Request Changes</div>
-            <div class="form-group">
-                <label class="form-label">Describe changes needed:</label>
-                <textarea id="changeDesc" placeholder="What would you like to change in the sitemap?"></textarea>
+            <div class="modal-title">✅ Submission Successful!</div>
+            <div class="modal-text">
+                <p>Thank you for reviewing the EpicTours sitemap!</p>
+                <p style="margin-top: 1rem;"><strong>Your feedback has been saved and files downloaded.</strong></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">Email the CSV/JSON files to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8ce1f9eee9e9e2edcce8e5ebe5f8ede0e2e9f4eda2efe3e1">[email&#160;protected]</a></p>
             </div>
             <div style="display: flex; gap: 1rem;">
-                <button class="btn-primary" onclick="submitResubmit()">Submit</button>
-                <button class="btn-secondary" onclick="closeModal('resubmitModal')">Cancel</button>
+                <button class="btn-primary" onclick="location.reload()">Close</button>
             </div>
         </div>
     </div>
 
-    <script>
-        const pages = [
-            { name: 'Navigation & Information Architecture', icon: '📍', sections: ['Site Structure', 'Navigation Hierarchy', 'User Flow Mapping'] },
-            { name: 'Homepage', icon: '🏠', sections: ['Hero Section', 'Featured Tours', 'Trust Indicators', 'Call to Action'] },
-            { name: 'Paris - Top Sights', icon: '🗼', sections: ['Eiffel Tower', 'Louvre Museum', 'Notre-Dame', 'Arc de Triomphe'] },
-            { name: 'Paris - Unique Experiences', icon: '🎨', sections: ['Wine Tasting Tours', 'Street Art Walks', 'Local Markets', 'Seine Cruises'] },
-            { name: 'Paris - All Activities', icon: '📋', sections: ['Search Interface', 'Price/Duration/Time/Language Filters', 'Interest Category Pills', 'Activity Cards'] },
-            { name: 'London - Top Sights', icon: '🚪', sections: ['Big Ben', 'Tower Bridge', 'Westminster Abbey', 'Buckingham Palace'] },
-            { name: 'London - Unique Experiences', icon: '☕', sections: ['Tea Tours', 'Street Food', 'Theatre Shows', 'Pub Crawls'] },
-            { name: 'London - All Activities', icon: '📋', sections: ['Search Interface', 'Filters', 'Activity Cards', 'Pagination'] },
-            { name: 'Rome - Top Sights', icon: '🏛️', sections: ['Colosseum', 'Vatican', 'Roman Forum', 'Pantheon'] },
-            { name: 'Rome - Unique Experiences', icon: '🍝', sections: ['Cooking Classes', 'Catacombs', 'Street Art', 'Food Tours'] },
-            { name: 'Rome - All Activities', icon: '📋', sections: ['Search Interface', 'Filters', 'Activity Cards', 'Pagination'] },
-            { name: 'NYC - Top Sights', icon: '🗽', sections: ['Statue of Liberty', 'Empire State', 'Times Square', 'Central Park'] },
-            { name: 'NYC - Unique Experiences', icon: '🎭', sections: ['Broadway Shows', 'Rooftop Bars', 'Street Art', 'Food Markets'] },
-            { name: 'NYC - All Activities', icon: '📋', sections: ['Search Interface', 'Filters', 'Activity Cards', 'Pagination'] },
-            { name: 'Barcelona - Top Sights', icon: '🎪', sections: ['Sagrada Familia', 'Park Güell', 'Gothic Quarter', 'Casa Batlló'] },
-            { name: 'Barcelona - Unique Experiences', icon: '🎸', sections: ['Flamenco Shows', 'Beach Clubs', 'Architecture Tours', 'Food Tours'] },
-            { name: 'Barcelona - All Activities', icon: '📋', sections: ['Search Interface', 'Filters', 'Activity Cards', 'Pagination'] },
-            { name: 'All Tours Listing', icon: '📋', sections: ['Search Interface', 'Filter Sidebar', 'Tour Cards Grid', 'Pagination'] },
-            { name: 'Tour Detail Page', icon: '🎫', sections: ['Gallery (multiple photos with zoom)', 'Itinerary (Timeline)', 'Inclusions/Exclusions (Checklist)', 'Reviews', 'Sticky Mobile Footer'] },
-            { name: 'Search & Filters', icon: '🔍', sections: ['Price Range Slider', 'Duration Filter', 'Time of Day Toggle', 'Language Selection', 'Interest Pills', 'Results Grid'] },
-            { name: 'B2B Partners', icon: '🤝', sections: ['Affiliate Program', 'Partner Benefits', 'API Docs', 'Dashboard'] },
-            { name: 'Help & Support', icon: '❓', sections: ['FAQ Section', 'Booking Guide', 'Cancellation Policy', 'Contact Support', 'Live Chat'] },
-            { name: 'About Us', icon: '💼', sections: ['Mission', 'Team', 'Values', 'Leadership', 'Press'] },
-            { name: 'Blog & Travel Guide', icon: '📝', sections: ['Destination Guides', 'Local Experiences', 'Travel Tips', 'Expert Authors (Bio, Links)'] },
-            { name: 'Contact Us', icon: '📞', sections: ['Contact Form', 'Email Support', 'Phone', 'Live Chat'] }
-        ];
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        const pages = {
+            navigation: { name: '🧭 Navigation & Information Architecture', icon: '🧭', sections: [{ id: 's1', name: 'Header Navigation', description: 'Top navigation bar', details: ['Logo/Home', 'Tours by City', 'All Tours', 'Travel Agents', 'About', 'Blog', 'FAQ', 'Contact'] }, { id: 's2', name: 'Footer Navigation', description: 'Footer links', details: ['Quick links', 'Legal', 'Social media'] }, { id: 's3', name: 'Mobile Navigation', description: 'Hamburger menu', details: ['Responsive', 'Slide-out drawer'] }, { id: 's4', name: 'Breadcrumbs', description: 'Page hierarchy', details: ['Home > City > Tour'] }] },
+            homepage: { name: '🏠 Homepage', icon: '🏠', sections: [{ id: 's1', name: 'Hero Section', description: 'Banner with CTA', details: ['Hero image', 'Headline', 'CTA buttons'] }, { id: 's2', name: 'Featured Cities', description: '5 city cards', details: ['Images', 'Tour counts'] }, { id: 's3', name: 'Featured Tours', description: 'Tour carousel', details: ['Auto-scroll', 'Navigation'] }, { id: 's4', name: 'Why Choose', description: 'Brand differentiation', details: ['3-4 benefits', 'Icons'] }, { id: 's5', name: 'How It Works', description: '4-step process', details: ['Step-by-step'] }, { id: 's6', name: 'Testimonials', description: 'Social proof', details: ['Reviews', 'Ratings'] }, { id: 's7', name: 'B2B Teaser', description: 'Partner section', details: ['Partner value'] }, { id: 's8', name: 'Newsletter', description: 'Email signup', details: ['Email input', 'Subscribe'] }] },
+            cities: { name: '🌍 City Landing Pages (5)', icon: '🌍', sections: [{ id: 's1', name: 'City Hero Banner', description: 'Landmark image', details: ['City name', 'Tagline'] }, { id: 's2', name: 'City Introduction', description: 'About the city', details: ['Description', 'Highlights'] }, { id: 's3', name: 'Tours Grid', description: 'All city tours', details: ['Tour cards', 'Pagination'] }, { id: 's4', name: 'City Filters', description: 'Filter and sort', details: ['By type, price'] }, { id: 's5', name: 'City Reviews', description: 'Testimonials', details: ['Customer reviews'] }, { id: 's6', name: 'City Call-to-Action', description: 'Primary conversion', details: ['Book button'] }] },
+            allTours: { name: '📋 All Tours Listing', icon: '📋', sections: [{ id: 's1', name: 'Hero and Search', description: 'Header with search', details: ['Search bar'] }, { id: 's2', name: 'Filters Sidebar', description: 'Multi-filter', details: ['City', 'Price', 'Duration'] }, { id: 's3', name: 'Results Grid', description: 'Tour display', details: ['3 columns desktop'] }, { id: 's4', name: 'Sorting Options', description: 'Reorder options', details: ['Popularity', 'Rating'] }, { id: 's5', name: 'Pagination', description: 'Page navigation', details: ['Page numbers'] }] },
+            tourDetail: { name: '🎫 Tour Detail Pages (20-40)', icon: '🎫', sections: [{ id: 's1', name: 'Tour Header', description: 'Title and price', details: ['Title', 'Rating', 'Price'] }, { id: 's2', name: 'Photo Gallery', description: 'Tour photos', details: ['Main image', 'Thumbnails'] }, { id: 's3', name: 'Tour Highlights', description: 'Key information', details: ['Duration', 'Group size'] }, { id: 's4', name: 'Overview', description: 'Tour description', details: ['300-500 words'] }, { id: 's5', name: 'Itinerary', description: 'Hour-by-hour timeline', details: ['Timeline', 'Stops'] }, { id: 's6', name: 'Inclusions and Exclusions', description: 'What is included', details: ['Details'] }, { id: 's7', name: 'Requirements', description: 'Fitness and dress code', details: ['Age limits'] }, { id: 's8', name: 'Meeting Point', description: 'Location and map', details: ['Address', 'Map'] }, { id: 's9', name: 'Cancellation Policy', description: 'Policy details', details: ['Refund windows'] }, { id: 's10', name: 'Reviews', description: 'Customer reviews', details: ['Ratings', 'Feedback'] }, { id: 's11', name: 'Similar Tours', description: 'Cross-sell', details: ['3-4 related'] }, { id: 's12', name: 'Location Map', description: 'Route on map', details: ['Google Maps'] }, { id: 's13', name: 'Tour Variants', description: 'Private versus semi-private', details: ['Options'] }, { id: 's14', name: 'Bokun Booking Widget', description: 'Booking engine', details: ['Calendar', 'Payment'] }, { id: 's15', name: 'Mobile Sticky Call-to-Action', description: 'Always-visible booking', details: ['Price and Book'] }] },
+            search: { name: '🔍 Search and Filter Results', icon: '🔍', sections: [{ id: 's1', name: 'Search Header', description: 'Search bar', details: ['Search input'] }, { id: 's2', name: 'Filters', description: 'Advanced filtering', details: ['City', 'Price', 'Duration'] }, { id: 's3', name: 'Results', description: 'Search results', details: ['Grid/List view'] }, { id: 's4', name: 'Sorting', description: 'Sort options', details: ['Relevance', 'Price'] }, { id: 's5', name: 'Empty State', description: 'No results message', details: ['Suggestions'] }] },
+            b2b: { name: '🤝 Travel Agents and B2B Partners', icon: '🤝', sections: [{ id: 's1', name: 'B2B Hero Section', description: 'Introduction', details: ['Value proposition'] }, { id: 's2', name: 'Benefits Section', description: 'Partnership advantages', details: ['Competitive rates'] }, { id: 's3', name: 'Pricing and Commissions', description: 'Commission tiers', details: ['Rate structure'] }, { id: 's4', name: 'Affiliate System', description: 'Discount codes', details: ['How codes work'] }, { id: 's5', name: 'B2B Form', description: 'Lead capture', details: ['Contact form'] }, { id: 's6', name: 'B2B FAQ', description: 'Common questions', details: ['Frequently asked questions'] }, { id: 's7', name: 'B2B Contact', description: 'Direct contact', details: ['Email', 'Phone'] }, { id: 's8', name: 'Partner Testimonials', description: 'Case studies', details: ['Partner quotes'] }] },
+            about: { name: '💼 About Us', icon: '💼', sections: [{ id: 's1', name: 'About Hero Section', description: 'Introduction', details: ['Headline'] }, { id: 's2', name: 'Company Story', description: 'Founding narrative', details: ['Mission'] }, { id: 's3', name: 'Values and Beliefs', description: 'Core principles', details: ['3-4 values'] }, { id: 's4', name: 'What Sets Us Apart', description: 'Differentiation', details: ['Competitive edge'] }, { id: 's5', name: 'Meet the Team', description: 'Team introduction', details: ['Team bios'] }, { id: 's6', name: 'Achievements and Recognition', description: 'Credibility', details: ['Awards', 'Stats'] }, { id: 's7', name: 'Call-to-Action', description: 'Next step', details: ['Book button'] }] },
+            blog: { name: '📝 Blog and Travel Guide', icon: '📝', sections: [{ id: 's1', name: 'Blog Hero Section', description: 'Header section', details: ['Headline'] }, { id: 's2', name: 'Featured Articles', description: 'Top content', details: ['Featured cards'] }, { id: 's3', name: 'Blog Categories', description: 'Content organization', details: ['Category filter'] }, { id: 's4', name: 'Blog Search', description: 'Search articles', details: ['Search bar'] }, { id: 's5', name: 'Articles Grid', description: 'Blog listing', details: ['Article cards'] }, { id: 's6', name: 'Blog Pagination', description: 'Navigate pages', details: ['Page navigation'] }, { id: 's7', name: 'Article Template', description: 'Individual post', details: ['Content format'] }, { id: 's8', name: 'Related Articles', description: 'Cross-linking', details: ['Related posts'] }, { id: 's9', name: 'Tour Call-to-Action', description: 'Link to bookings', details: ['Related tours'] }, { id: 's10', name: 'Social Sharing', description: 'Share buttons', details: ['Facebook', 'Twitter'] }, { id: 's11', name: 'Newsletter Call-to-Action', description: 'Email signup', details: ['Signup form'] }] },
+            faq: { name: '❓ FAQ', icon: '❓', sections: [{ id: 's1', name: 'FAQ Hero Section', description: 'Header', details: ['Headline', 'Search'] }, { id: 's2', name: 'FAQ Categories', description: 'Organize by topic', details: ['Category tabs'] }, { id: 's3', name: 'FAQ Items', description: 'Question and answer pairs', details: ['Accordion'] }, { id: 's4', name: 'FAQ Search', description: 'Search frequently asked questions', details: ['Search bar'] }, { id: 's5', name: 'Related Content', description: 'Cross-linking', details: ['Links'] }] },
+            contact: { name: '📞 Contact Us', icon: '📞', sections: [{ id: 's1', name: 'Contact Hero Section', description: 'Introduction', details: ['Headline'] }, { id: 's2', name: 'Contact Form', description: 'Lead capture', details: ['Form fields'] }, { id: 's3', name: 'Direct Contact Information', description: 'Multiple channels', details: ['Email', 'Phone', 'WhatsApp'] }, { id: 's4', name: 'Location Map', description: 'Office location', details: ['Google Maps'] }, { id: 's5', name: 'Department Routing', description: 'Inquiry direction', details: ['Routing'] }, { id: 's6', name: 'FAQ Link', description: 'Self-service option', details: ['FAQ link'] }] }
+        };
 
-        let approved = new Set();
-        let currentPage = 0;
+        let currentPage = 'navigation';
+        const sectionStates = {};
+        const customSections = {};
+        let submissionData = {};
 
-        function renderSidebar() {
-            const menu = document.getElementById('pageMenu');
-            menu.innerHTML = pages.map((page, idx) => `
-                <li class="sidebar-item">
-                    <div class="sidebar-link ${currentPage === idx ? 'active' : ''}" onclick="selectPage(${idx})">
-                        <span class="sidebar-icon">${page.icon}</span>
-                        <span>${page.name}</span>
-                        <span class="page-status">${approved.has(idx) ? '✓' : ''}</span>
-                    </div>
-                </li>
-            `).join('');
+        Object.keys(pages).forEach(key => {
+            sectionStates[key] = {};
+            customSections[key] = [];
+            pages[key].sections.forEach(s => {
+                sectionStates[key][s.id] = { expanded: false, feedback: '', approved: false, removed: false };
+            });
+        });
+
+        function initSidebar() {
+            pageMenu.innerHTML = Object.keys(pages).map(key => {
+                const p = pages[key];
+                const approvedCount = Object.values(sectionStates[key]).filter(x => x.approved && !x.removed).length + customSections[key].filter(x => x.approved).length;
+                const totalCount = Object.values(sectionStates[key]).filter(x => !x.removed).length + customSections[key].length;
+                const status = totalCount === 0 ? '' : approvedCount === totalCount ? '✅' : approvedCount > 0 ? '⭕' : '○';
+                return `<li class="sidebar-item"><a class="sidebar-link ${key === currentPage ? 'active' : ''}" onclick="switchPage('${key}'); return false;"><span class="sidebar-icon">${p.icon}</span><span>${p.name.split(' ').slice(1).join(' ')}</span><span class="page-status">${status}</span></a></li>`;
+            }).join('');
         }
 
-        function selectPage(idx) {
-            currentPage = idx;
-            renderSidebar();
-            renderPageContent();
+        function switchPage(key) {
+            currentPage = key;
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            event.target.closest('.sidebar-link').classList.add('active');
+            renderPage();
         }
 
-        function renderPageContent() {
-            const page = pages[currentPage];
-            const isApproved = approved.has(currentPage);
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             
-            const html = `
-                <div class="page-header">
-                    <div class="page-title">${page.icon} ${page.name}</div>
-                    <button class="page-approve-btn ${isApproved ? 'approved' : ''}" onclick="approvePage()" ${isApproved ? 'disabled' : ''}>
-                        ${isApproved ? '✓ Approved' : 'Approve Page'}
-                    </button>
-                </div>
+            if (tab === 'review') document.getElementById('reviewTab').style.display = 'block';
+            else if (tab === 'visual') { document.getElementById('visualTab').style.display = 'block'; renderSitemap(); }
+            else if (tab === 'summary') { document.getElementById('summaryTab').style.display = 'block'; renderSummary(); }
+            
+            event.target.classList.add('active');
+        }
 
-                <div class="sections-container">
-                    ${page.sections.map((section) => `
-                        <div class="section-card">
-                            <div class="section-header" onclick="toggleSection(this)">
-                                <div class="section-title">${section}</div>
-                                <div class="section-icon">▼</div>
-                            </div>
-                            <div class="section-content">
-                                <div style="color: #666;">Section: ${section}</div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
+        function renderPage() {
+            const p = pages[currentPage];
+            const s = sectionStates[currentPage];
+            const approvedCount = Object.values(s).filter(x => x.approved && !x.removed).length + customSections[currentPage].filter(x => x.approved).length;
+            const totalCount = Object.values(s).filter(x => !x.removed).length + customSections[currentPage].length;
             
+            let html = `<div class="page-header"><div><div class="page-title">${p.name}</div></div><div class="page-approval"><span style="color: #7c3aed; font-weight: 600;">${approvedCount}/${totalCount}</span><button class="page-approve-btn ${totalCount > 0 && approvedCount === totalCount ? 'approved' : ''}" onclick="approvePage('${currentPage}')">${approvedCount === totalCount && totalCount > 0 ? '✅ Approved' : '⭕ Approve'}</button></div></div>`;
+            
+            html += `<div class="sections-container">`;
+            p.sections.forEach(sec => {
+                if (s[sec.id].removed) return;
+                const st = s[sec.id];
+                html += `<div class="section-card"><div class="section-header" onclick="toggleSection('${sec.id}')"><div class="section-title"><span>${st.expanded ? '−' : '+'}</span> ${sec.name}</div><div class="section-actions"><button class="action-btn btn-toggle" onclick="toggleSection('${sec.id}'); return false;">${st.expanded ? '−' : '+'}</button><button class="action-btn btn-remove" onclick="removeSection('${sec.id}'); return false;">✕</button></div></div><div class="section-content ${st.expanded ? 'expanded' : ''}"><div class="section-description">${sec.description}</div><div class="section-items"><ul>${sec.details.map(d => `<li>${d}</li>`).join('')}</ul></div><div class="feedback-box"><label class="feedback-label">Your Feedback:</label><textarea class="feedback-textarea" onchange="updateFeedback('${sec.id}', this.value)" placeholder="Add comments...">${st.feedback}</textarea></div><div class="approval-buttons"><button class="btn-approve ${st.approved ? 'approved' : ''}" onclick="approveSection('${sec.id}')">${st.approved ? '✓ Approved' : '⭕ Approve'}</button></div></div></div>`;
+            });
+
+            customSections[currentPage].forEach((custom, idx) => {
+                html += `<div class="section-card"><div class="section-header" onclick="toggleCustom('${currentPage}', ${idx})"><div class="section-title"><span>${custom.expanded ? '−' : '+'}</span> ${custom.name} (Custom)</div><div class="section-actions"><button class="action-btn btn-remove" onclick="removeCustomSection('${currentPage}', ${idx}); return false;">✕</button></div></div><div class="section-content ${custom.expanded ? 'expanded' : ''}"><div class="section-description">${custom.description}</div><div class="feedback-box"><label class="feedback-label">Your Feedback:</label><textarea class="feedback-textarea" onchange="updateCustomFeedback('${currentPage}', ${idx}, this.value)" placeholder="Add comments...">${custom.feedback}</textarea></div><div class="approval-buttons"><button class="btn-approve ${custom.approved ? 'approved' : ''}" onclick="approveCustom('${currentPage}', ${idx})">${custom.approved ? '✓ Approved' : '⭕ Approve'}</button></div></div></div>`;
+            });
+
+            html += `</div><div class="add-section-panel"><div class="add-section-title">+ Add Custom Section</div><div class="add-section-form"><input type="text" class="form-input" id="customName" placeholder="Section name"><input type="text" class="form-input" id="customDesc" placeholder="Description"><button class="add-btn" onclick="addCustomSection('${currentPage}')">Add</button></div></div>`;
+
             document.getElementById('pageContent').innerHTML = html;
-            updateProgress();
         }
 
-        function approvePage() {
-            approved.add(currentPage);
-            renderSidebar();
-            renderPageContent();
+        function toggleSection(id) { sectionStates[currentPage][id].expanded = !sectionStates[currentPage][id].expanded; renderPage(); }
+        function removeSection(id) { sectionStates[currentPage][id].removed = !sectionStates[currentPage][id].removed; initSidebar(); renderPage(); }
+        function updateFeedback(id, val) { sectionStates[currentPage][id].feedback = val; }
+        function approveSection(id) { sectionStates[currentPage][id].approved = !sectionStates[currentPage][id].approved; initSidebar(); renderPage(); }
+        function approvePage(pageKey) {
+            const allSections = Object.keys(sectionStates[pageKey]).map(id => sectionStates[pageKey][id]).concat(customSections[pageKey]);
+            const allApproved = allSections.filter(s => !s.removed).every(s => s.approved);
+            allSections.forEach(s => { if (!s.removed) s.approved = !allApproved; });
+            initSidebar(); renderPage();
+        }
+        function addCustomSection(pageKey) {
+            const name = document.getElementById('customName').value;
+            const desc = document.getElementById('customDesc').value;
+            if (!name || !desc) { alert('Fill all fields'); return; }
+            customSections[pageKey].push({ name, description: desc, feedback: '', approved: false, expanded: false });
+            document.getElementById('customName').value = '';
+            document.getElementById('customDesc').value = '';
+            initSidebar(); renderPage();
+        }
+        function toggleCustom(pageKey, idx) { customSections[pageKey][idx].expanded = !customSections[pageKey][idx].expanded; renderPage(); }
+        function removeCustomSection(pageKey, idx) { customSections[pageKey].splice(idx, 1); initSidebar(); renderPage(); }
+        function updateCustomFeedback(pageKey, idx, val) { customSections[pageKey][idx].feedback = val; }
+        function approveCustom(pageKey, idx) { customSections[pageKey][idx].approved = !customSections[pageKey][idx].approved; initSidebar(); renderPage(); }
+
+        function renderSitemap() {
+            let html = '';
+            Object.keys(pages).forEach(key => {
+                const p = pages[key];
+                const approvedCount = Object.values(sectionStates[key]).filter(x => x.approved && !x.removed).length + customSections[key].filter(x => x.approved).length;
+                const totalCount = Object.values(sectionStates[key]).filter(x => !x.removed).length + customSections[key].length;
+                let status = 'pending';
+                if (totalCount > 0) {
+                    if (approvedCount === totalCount) status = 'approved';
+                    else if (approvedCount > 0) status = 'partial';
+                }
+                html += `<div class="page-node ${status}" title="${approvedCount}/${totalCount}">${p.icon}</div>`;
+            });
+            document.getElementById('sitemapGrid').innerHTML = html;
         }
 
-        function toggleSection(header) {
-            header.nextElementSibling.classList.toggle('expanded');
-            header.querySelector('.section-icon').style.transform = header.nextElementSibling.classList.contains('expanded') ? 'rotate(180deg)' : '';
+        function renderSummary() {
+            let totalPages = 0, approvedPages = 0, totalSections = 0, approvedSections = 0;
+            Object.keys(pages).forEach(key => {
+                totalPages++;
+                const approved = Object.values(sectionStates[key]).filter(x => x.approved && !x.removed).length + customSections[key].filter(x => x.approved).length;
+                const total = Object.values(sectionStates[key]).filter(x => !x.removed).length + customSections[key].length;
+                if (approved === total && total > 0) approvedPages++;
+                totalSections += total;
+                approvedSections += approved;
+            });
+            const pct = totalSections > 0 ? Math.round((approvedSections / totalSections) * 100) : 0;
+            document.getElementById('summaryStats').innerHTML = `<div class="stat-card"><div class="stat-value">${approvedPages}/${totalPages}</div><div class="stat-label">Pages</div></div><div class="stat-card"><div class="stat-value">${approvedSections}/${totalSections}</div><div class="stat-label">Sections</div></div><div class="stat-card"><div class="stat-value">${pct}%</div><div class="stat-label">Complete</div></div>`;
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressFill').textContent = pct + '%';
         }
 
-        function updateProgress() {
-            if (approved.size === pages.length) {
-                renderTreeStructure();
-                document.getElementById('visualSummary').style.display = 'block';
-                document.getElementById('actionSection').style.display = 'flex';
-                document.getElementById('submitBtn').disabled = false;
-            }
+        function submitReview() {
+            submissionData = { timestamp: new Date().toISOString(), pages: {} };
+            Object.keys(pages).forEach(pageKey => {
+                submissionData.pages[pageKey] = { name: pages[pageKey].name, sections: {} };
+                Object.keys(sectionStates[pageKey]).forEach(sectionId => {
+                    const state = sectionStates[pageKey][sectionId];
+                    submissionData.pages[pageKey].sections[sectionId] = { feedback: state.feedback, approved: state.approved };
+                });
+                customSections[pageKey].forEach((custom, idx) => {
+                    submissionData.pages[pageKey].sections['custom-' + idx] = { name: custom.name, feedback: custom.feedback, approved: custom.approved, custom: true };
+                });
+            });
+            localStorage.setItem('epictours-feedback', JSON.stringify(submissionData));
+            document.getElementById('successModal').classList.add('show');
+            downloadCSV();
+            downloadJSON();
         }
 
-        function renderTreeStructure() {
-            const tree = `EPICTOURS WEBSITE SITEMAP
-══════════════════════════════════════════════════════════
-
-📍 Navigation & Information Architecture
-
-🏠 Homepage
-│  ├─ Hero Section
-│  ├─ Featured Tours
-│  ├─ Trust Indicators
-│  └─ Call to Action
-│
-🌍 CITY PAGES (5 Cities × 3 Tiers)
-│
-├─ PARIS
-│  ├─ ⭐ Top Sights (4 curator picks, high-demand)
-│  │  ├─ Eiffel Tower
-│  │  ├─ Louvre Museum
-│  │  ├─ Notre-Dame
-│  │  └─ Arc de Triomphe
-│  │
-│  ├─ 🎨 Unique Experiences (4 local, niche)
-│  │  ├─ Wine Tasting Tours
-│  │  ├─ Street Art Walks
-│  │  ├─ Local Markets
-│  │  └─ Seine Cruises
-│  │
-│  └─ 📋 All Activities (searchable with filters)
-│     ├─ Search Interface
-│     ├─ Price/Duration/Time/Language Filters
-│     ├─ Interest Category Pills
-│     └─ Activity Cards
-│
-├─ LONDON (Top Sights | Unique Exp. | All Activities)
-├─ ROME (Top Sights | Unique Exp. | All Activities)
-├─ NEW YORK (Top Sights | Unique Exp. | All Activities)
-└─ BARCELONA (Top Sights | Unique Exp. | All Activities)
-│
-📋 All Tours Listing
-│  ├─ Search Interface
-│  ├─ Filter Sidebar
-│  ├─ Tour Cards Grid
-│  └─ Pagination
-│
-🎫 Tour Detail Page
-│  ├─ Gallery (multiple photos with zoom capability)
-│  ├─ Itinerary (Timeline Format - NOT paragraph)
-│  ├─ Inclusions/Exclusions (Checklist format)
-│  ├─ Reviews & Rating
-│  └─ Sticky Mobile Footer (Price + Book Button)
-│
-🔍 Search & Filter Results
-│  ├─ Sidebar Filters:
-│  │  ├─ Price Range Slider
-│  │  ├─ Duration Filter
-│  │  ├─ Time of Day Toggle
-│  │  ├─ Language Selection
-│  │  └─ Interest Category Pills
-│  ├─ Advanced Results Grid
-│  └─ Sorting & Pagination
-│
-🤝 B2B Partners
-│  ├─ Affiliate Program
-│  ├─ Partner Benefits
-│  ├─ API Documentation
-│  └─ Partner Dashboard
-│
-❓ Help & Support Hub (NEW)
-│  ├─ FAQ Section
-│  ├─ Booking Guide
-│  ├─ Cancellation Policy
-│  ├─ Contact Support Form
-│  └─ Live Chat Widget
-│
-💼 About Us
-│  ├─ Company Mission
-│  ├─ Team
-│  ├─ Values
-│  ├─ Leadership
-│  └─ Press
-│
-📝 Blog & Travel Guide
-│  ├─ Destination Guides (section)
-│  ├─ Local Experiences (section)
-│  ├─ Travel Tips (section)
-│  └─ Expert Authors (name, bio, social links)
-│
-📞 Contact Us
-│  ├─ Contact Form
-│  ├─ Email Support
-│  ├─ Phone Support
-│  └─ Live Chat
-
-══════════════════════════════════════════════════════════
-TECHNICAL SPECIFICATIONS:
-✓ Mobile-first Design
-✓ Sticky Navigation Bar
-✓ Touch-friendly Filters (48px+ targets)
-✓ Fast Load Times (Target: <3 seconds)
-✓ 95% GetYourGuide Alignment
-✓ Responsive All Devices`;
-
-            document.getElementById('treeView').textContent = tree;
+        function downloadCSV() {
+            let csv = 'Page,Section,Feedback,Approved\n';
+            Object.keys(submissionData.pages).forEach(pageKey => {
+                const page = submissionData.pages[pageKey];
+                Object.keys(page.sections).forEach(sectionId => {
+                    const section = page.sections[sectionId];
+                    const feedback = (section.feedback || '').replace(/,/g, ';').replace(/\n/g, ' ');
+                    csv += `"${page.name}","${section.name || sectionId}","${feedback}","${section.approved ? 'Yes' : 'No'}"\n`;
+                });
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `epictours-feedback-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
         }
 
-        function openResubmitModal() {
-            document.getElementById('resubmitModal').classList.add('show');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('show');
-        }
-
-        function submitResubmit() {
-            const desc = document.getElementById('changeDesc').value.trim();
-            if (!desc) {
-                alert('Please describe the changes');
-                return;
-            }
-            document.getElementById('successMsg').innerHTML = '✓ Changes submitted! Mubeena will review and update.';
-            document.getElementById('successMsg').classList.add('show');
-            document.getElementById('changeDesc').value = '';
-            closeModal('resubmitModal');
-            setTimeout(() => {
-                document.getElementById('successMsg').classList.remove('show');
-            }, 4000);
-        }
-
-        function submitForReview() {
-            const subject = 'Epic Tours - Website Sitemap - Approved';
-            const body = `Hi all,
-
-The following structure of the sitemap has been reviewed and approved by EpicTours:
-
-═══════════════════════════════════════════════════════════════════
-EPICTOURS WEBSITE SITEMAP - 26 PAGES | 100+ SECTIONS
-═══════════════════════════════════════════════════════════════════
-
-1. NAVIGATION & INFORMATION ARCHITECTURE
-   • Site Structure, Navigation Hierarchy, User Flow Mapping
-
-2. HOMEPAGE
-   • Hero Section, Featured Tours, Trust Indicators, CTA
-
-3-5. CITY LANDING PAGES (5 Cities - Paris, London, Rome, NYC, Barcelona)
-   Each city includes 3-tier structure:
-   
-   ⭐ TOP SIGHTS (Curator Picks, High-Demand)
-      • 4 premium activities per city
-   
-   🎨 UNIQUE EXPERIENCES (Local, Niche)
-      • 4 local experiences per city
-   
-   📋 ALL ACTIVITIES (Searchable with Filters)
-      • Price range, Duration, Time of day, Language filters
-      • Interest category pills
-      • Advanced activity cards with ratings
-
-6. ALL TOURS LISTING
-   • Search Interface
-   • Filter Sidebar (Price, Duration, Language, Category)
-   • Tour Cards Grid
-   • Pagination
-
-7. TOUR DETAIL PAGE
-   • Gallery (multiple photos with zoom capability)
-   • Title & Rating
-   • Itinerary (Timeline Format - NOT paragraph)
-   • Inclusions/Exclusions (Checklist format)
-   • Reviews & Ratings
-   • Sticky Mobile Footer (Price + Book Button)
-
-8. SEARCH & FILTER RESULTS PAGE
-   • Sidebar Filters:
-     - Price Range Slider
-     - Duration Filter
-     - Time of Day Toggle
-     - Language Selection
-     - Interest Category Pills
-   • Advanced Results Grid
-   • Sorting & Pagination
-
-9. B2B PARTNERS
-   • Affiliate Program
-   • Partner Benefits
-   • API Documentation
-   • Partner Dashboard
-
-10. HELP & SUPPORT HUB (NEW)
-    • FAQ Section
-    • Booking Guide
-    • Cancellation Policy
-    • Contact Support Form
-    • Live Chat Widget
-
-11. ABOUT US
-    • Company Mission
-    • Team
-    • Values
-    • Leadership
-    • Press
-
-12. BLOG & TRAVEL GUIDE (REORGANIZED)
-    • Destination Guides (section)
-    • Local Experiences (section)
-    • Travel Tips (section)
-    • Expert Author Profiles (name, bio, social links)
-
-13. CONTACT US
-    • Contact Form
-    • Email Support
-    • Phone Support
-    • Live Chat
-
-═══════════════════════════════════════════════════════════════════
-TECHNICAL SPECIFICATIONS:
-✓ Mobile-first Design
-✓ Sticky Navigation Bar
-✓ Touch-friendly Filters (48px+ targets)
-✓ Fast Load Times (Target: <3 seconds)
-✓ 95% GetYourGuide Alignment
-✓ Responsive Design All Devices
-═══════════════════════════════════════════════════════════════════
-
-Ready to proceed with design and development kickoff.
-
-Best regards,
-Mubeena, Project Manager`;
-
-            const recipients = ['mubeena@digitalnexa.com', 'jatin@digitalnexa.com', 'sam@epicguidedtours.com'];
-            
-            console.log('═══════════════════════════════════════');
-            console.log('SITEMAP SUBMISSION');
-            console.log('═══════════════════════════════════════');
-            console.log('Subject:', subject);
-            console.log('Recipients:', recipients.join(', '));
-            console.log('Body:', body);
-            
-            alert('✓ Sitemap approved and submitted!\n\nEmail sent to:\n' + recipients.join('\n') + '\n\nSubject: ' + subject);
-        }
-
-        // Initialize
-        renderSidebar();
-        renderPageContent();
-    </script>
-</body>
-</html>
+        function downloadJSON() {
+            const dataStr = JSON.stringify(submissionData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('
