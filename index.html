@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EpicTours Sitemap Dashboard - Approval</title>
+    <title>EpicTours Sitemap Dashboard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f3ff; color: #333; }
@@ -34,34 +34,32 @@
         .section-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(147,84,255,0.08); border: 1.5px solid #e9ddff; }
         .section-header { background: #f9f7ff; padding: 1.25rem; border-bottom: 1px solid #e9ddff; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
         .section-title { font-size: 1rem; font-weight: 600; color: #7c3aed; }
-        .section-icon { font-size: 1.2rem; }
+        .section-icon { font-size: 1.2rem; transition: transform 0.3s ease; }
         .section-content { padding: 1.5rem; display: none; }
         .section-content.expanded { display: block; }
-        .section-items { background: #f9f7ff; padding: 1rem; border-radius: 8px; margin-top: 0.5rem; }
-        .section-items ul { margin: 0; padding-left: 1.5rem; }
-        .section-items li { margin: 0.5rem 0; color: #555; font-size: 0.9rem; }
-        
-        .feedback-box { background: #f9f7ff; border: 1px solid #e9ddff; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
-        .feedback-label { font-size: 0.85rem; font-weight: 600; color: #7c3aed; margin-bottom: 0.5rem; display: block; }
-        .feedback-textarea { width: 100%; padding: 0.75rem; border: 1px solid #e9ddff; border-radius: 6px; font-family: 'Poppins', sans-serif; font-size: 0.85rem; min-height: 80px; resize: vertical; }
-        .feedback-textarea:focus { outline: none; border-color: #9354ff; box-shadow: 0 0 0 3px rgba(147,84,255,0.1); }
         
         .action-buttons { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
-        .btn-primary { background: #7c3aed; color: white; padding: 1rem 2rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif; font-size: 1rem; }
+        .btn-primary { background: #7c3aed; color: white; padding: 1rem 2rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif; font-size: 1rem; transition: all 0.3s ease; }
         .btn-primary:hover { background: #6d28d9; }
         .btn-primary:disabled { background: #d0d5dd; cursor: not-allowed; }
+        .btn-secondary { background: transparent; color: #7c3aed; padding: 1rem 2rem; border: 2px solid #7c3aed; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
+        .btn-secondary:hover { background: #f0e9ff; }
         
         .visual-sitemap { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(147,84,255,0.08); }
         .visual-title { font-size: 1.2rem; font-weight: 600; color: #7c3aed; margin-bottom: 1.5rem; }
-        .sitemap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
-        .page-node { padding: 1rem; border-radius: 8px; text-align: center; font-weight: 600; font-size: 0.8rem; transition: all 0.3s ease; border: 2px solid #e9ddff; }
-        .page-node.pending { background: #fef3c7; color: #92400e; }
-        .page-node.approved { background: #dcfce7; color: #065f46; border-color: #10b981; }
+        .tree-structure { font-family: 'Courier New', monospace; font-size: 0.8rem; color: #333; line-height: 1.6; background: #f9f7ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #9354ff; overflow-x: auto; white-space: pre; }
         
-        .summary-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-        .stat-card { background: #f9f7ff; padding: 1rem; border-radius: 8px; text-align: center; border-left: 4px solid #9354ff; }
-        .stat-value { font-size: 1.8rem; font-weight: 700; color: #7c3aed; }
-        .stat-label { font-size: 0.8rem; color: #555; margin-top: 0.25rem; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; border-radius: 12px; padding: 2rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-title { font-size: 1.5rem; font-weight: 700; color: #7c3aed; margin-bottom: 1rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; font-weight: 600; color: #7c3aed; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        textarea { width: 100%; padding: 0.75rem; border: 1px solid #e9ddff; border-radius: 6px; font-family: 'Poppins', sans-serif; min-height: 100px; resize: vertical; }
+        textarea:focus { outline: none; border-color: #9354ff; box-shadow: 0 0 0 3px rgba(147,84,255,0.1); }
+        
+        .success-msg { background: #dcfce7; color: #065f46; padding: 1rem; border-radius: 6px; border-left: 4px solid #10b981; display: none; margin-bottom: 1rem; font-weight: 600; }
+        .success-msg.show { display: block; }
         
         @media (max-width: 768px) {
             .dashboard { grid-template-columns: 1fr; }
@@ -84,54 +82,64 @@
 
         <!-- MAIN CONTENT -->
         <div class="main-content">
+            <div class="success-msg" id="successMsg"></div>
+
             <!-- CURRENT PAGE -->
             <div id="pageContent"></div>
 
             <!-- VISUAL SUMMARY -->
             <div class="visual-sitemap" id="visualSummary" style="display: none;">
-                <div class="visual-title">📊 Approval Summary</div>
-                <div class="summary-stats">
-                    <div class="stat-card">
-                        <div class="stat-value" id="approvedStat">0</div>
-                        <div class="stat-label">Pages Approved</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="totalStat">13</div>
-                        <div class="stat-label">Total Pages</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="percentStat">0%</div>
-                        <div class="stat-label">Complete</div>
-                    </div>
-                </div>
-                <div style="margin-top: 1.5rem;">
-                    <div style="font-size: 1rem; font-weight: 600; color: #7c3aed; margin-bottom: 1rem;">Approved Pages:</div>
-                    <div class="sitemap-grid" id="approvedPages"></div>
-                </div>
+                <div class="visual-title">📊 Sitemap Structure - Tree View</div>
+                <div class="tree-structure" id="treeView"></div>
             </div>
 
-            <!-- SUBMIT BUTTON -->
-            <div class="action-buttons" id="submitSection" style="display: none;">
+            <!-- ACTION BUTTONS -->
+            <div class="action-buttons" id="actionSection" style="display: none;">
                 <button class="btn-primary" id="submitBtn" onclick="submitForReview()" disabled>📤 Submit for Review</button>
+                <button class="btn-secondary" onclick="openResubmitModal()">📝 Resubmit Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESUBMIT MODAL -->
+    <div class="modal" id="resubmitModal">
+        <div class="modal-content">
+            <div class="modal-title">📝 Request Changes</div>
+            <div class="form-group">
+                <label class="form-label">Describe changes needed:</label>
+                <textarea id="changeDesc" placeholder="What would you like to change in the sitemap?"></textarea>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn-primary" onclick="submitResubmit()">Submit</button>
+                <button class="btn-secondary" onclick="closeModal('resubmitModal')">Cancel</button>
             </div>
         </div>
     </div>
 
     <script>
         const pages = [
-            { name: 'Destinations', sections: ['Top Sights (5 cities)', 'Unique Experiences (5 cities)', 'All Activities (5 cities)'], icon: '🌍' },
-            { name: 'All Tours Listing', sections: ['Search Interface', 'Advanced Filters', 'Tour Cards', 'Pagination'], icon: '📋' },
-            { name: 'Paris City Page', sections: ['Top Sights', 'Unique Experiences', 'All Activities'], icon: '🗼' },
-            { name: 'London City Page', sections: ['Top Sights', 'Unique Experiences', 'All Activities'], icon: '🚪' },
-            { name: 'Rome City Page', sections: ['Top Sights', 'Unique Experiences', 'All Activities'], icon: '🏛️' },
-            { name: 'New York City Page', sections: ['Top Sights', 'Unique Experiences', 'All Activities'], icon: '🗽' },
-            { name: 'Barcelona City Page', sections: ['Top Sights', 'Unique Experiences', 'All Activities'], icon: '🎨' },
-            { name: 'Blog & Content', sections: ['Destination Guides', 'Local Experiences', 'Travel Tips', 'Author Profiles'], icon: '📝' },
-            { name: 'Help & Support', sections: ['Booking Guide', 'Cancellation Policy', 'FAQ', 'Contact Support'], icon: '❓' },
-            { name: 'About Us', sections: ['Mission', 'Team', 'Values', 'Leadership', 'History', 'Press', 'Careers'], icon: '🏢' },
-            { name: 'B2B Partners', sections: ['Affiliate Program', 'Benefits', 'Docs', 'API', 'Dashboard', 'Portal', 'Terms'], icon: '🤝' },
-            { name: 'FAQ', sections: ['Booking', 'Cancellation', 'Refunds', 'Safety', 'Payments'], icon: '❔' },
-            { name: 'Search & Filters', sections: ['Advanced Filters', 'Price Range', 'Duration', 'Time of Day'], icon: '🔍' }
+            { name: 'Homepage', icon: '🏠', sections: ['Hero Section', 'Featured Destinations', 'Call to Action'] },
+            { name: 'Paris - Top Sights', icon: '🗼', sections: ['Eiffel Tower', 'Louvre Museum', 'Notre-Dame', 'Arc de Triomphe'] },
+            { name: 'Paris - Unique Experiences', icon: '🎨', sections: ['Wine Tasting', 'Street Art Tours', 'Local Markets', 'Seine Cruises'] },
+            { name: 'Paris - All Activities', icon: '📋', sections: ['Search Interface', 'Price/Duration/Language Filters', 'Activity Cards', 'Pagination'] },
+            { name: 'London - Top Sights', icon: '🚪', sections: ['Big Ben', 'Tower Bridge', 'Westminster Abbey', 'Buckingham Palace'] },
+            { name: 'London - Unique Experiences', icon: '☕', sections: ['Tea Tours', 'Street Food', 'Theatre Shows', 'Pub Crawls'] },
+            { name: 'London - All Activities', icon: '📋', sections: ['Search Interface', 'Filters', 'Activity Cards', 'Pagination'] },
+            { name: 'Rome - Top Sights', icon: '🏛️', sections: ['Colosseum', 'Vatican', 'Roman Forum', 'Pantheon'] },
+            { name: 'Rome - Unique Experiences', icon: '🍝', sections: ['Cooking Classes', 'Catacombs', 'Street Art', 'Food Tours'] },
+            { name: 'Rome - All Activities', icon: '📋', sections: ['Search Interface', 'Filters', 'Activity Cards', 'Pagination'] },
+            { name: 'NYC - Top Sights', icon: '🗽', sections: ['Statue of Liberty', 'Empire State', 'Times Square', 'Central Park'] },
+            { name: 'NYC - Unique Experiences', icon: '🎭', sections: ['Broadway', 'Rooftop Bars', 'Street Art', 'Food Markets'] },
+            { name: 'NYC - All Activities', icon: '📋', sections: ['Search Interface', 'Filters', 'Activity Cards', 'Pagination'] },
+            { name: 'Barcelona - Top Sights', icon: '🎪', sections: ['Sagrada Familia', 'Park Güell', 'Gothic Quarter', 'Casa Batlló'] },
+            { name: 'Barcelona - Unique Experiences', icon: '🎸', sections: ['Flamenco Shows', 'Beach Clubs', 'Architecture', 'Food Tours'] },
+            { name: 'Barcelona - All Activities', icon: '📋', sections: ['Search Interface', 'Filters', 'Activity Cards', 'Pagination'] },
+            { name: 'Activity Detail', icon: '🎫', sections: ['Gallery (4+ photos, zoom)', 'Itinerary (Timeline)', 'Inclusions/Exclusions (Checklist)', 'Sticky Mobile Footer'] },
+            { name: 'Search & Filters', icon: '🔍', sections: ['Price Range Slider', 'Duration Filter', 'Time of Day', 'Language Selection', 'Interest Pills'] },
+            { name: 'Blog & Guides', icon: '📝', sections: ['Destination Guides', 'Local Experiences', 'Travel Tips', 'Expert Authors (Bio, Links)'] },
+            { name: 'Help & Support', icon: '❓', sections: ['FAQ', 'Booking Guide', 'Cancellation Policy', 'Contact Form', 'Live Chat'] },
+            { name: 'About Us', icon: '🏢', sections: ['Company Mission', 'Team', 'Values', 'Leadership'] },
+            { name: 'B2B Partners', icon: '🤝', sections: ['Affiliate Program', 'Partner Benefits', 'API Docs', 'Dashboard'] }
         ];
 
         let approved = new Set();
@@ -162,7 +170,7 @@
             
             const html = `
                 <div class="page-header">
-                    <div class="page-title">${currentPage + 1}. ${page.name}</div>
+                    <div class="page-title">${page.icon} ${page.name}</div>
                     <div class="page-approval">
                         <button class="page-approve-btn ${isApproved ? 'approved' : ''}" onclick="approvePage()" ${isApproved ? 'disabled' : ''}>
                             ${isApproved ? '✓ Approved' : 'Approve Page'}
@@ -171,18 +179,14 @@
                 </div>
 
                 <div class="sections-container">
-                    ${page.sections.map((section, idx) => `
+                    ${page.sections.map((section) => `
                         <div class="section-card">
                             <div class="section-header" onclick="toggleSection(this)">
                                 <div class="section-title">${section}</div>
                                 <div class="section-icon">▼</div>
                             </div>
                             <div class="section-content">
-                                <div style="color: #666; margin-bottom: 1rem;">This section contains the ${section.toLowerCase()} content and components.</div>
-                                <div class="feedback-box">
-                                    <label class="feedback-label">Feedback (optional):</label>
-                                    <textarea class="feedback-textarea" placeholder="Add any feedback or changes needed for this section..."></textarea>
-                                </div>
+                                <div style="color: #666;">Section: ${section}</div>
                             </div>
                         </div>
                     `).join('')}
@@ -205,39 +209,198 @@
         }
 
         function updateProgress() {
-            const approvedCount = approved.size;
-            const total = pages.length;
-            const percent = Math.round((approvedCount / total) * 100);
-
-            document.getElementById('approvedStat').textContent = approvedCount;
-            document.getElementById('percentStat').textContent = percent + '%';
-
-            // Show summary when all approved
-            if (approvedCount === total) {
+            if (approved.size === pages.length) {
+                renderTreeStructure();
                 document.getElementById('visualSummary').style.display = 'block';
-                document.getElementById('submitSection').style.display = 'block';
+                document.getElementById('actionSection').style.display = 'flex';
                 document.getElementById('submitBtn').disabled = false;
-                
-                // Show approved pages
-                const approved Nodes = [...approved].map(idx => `
-                    <div class="page-node approved">${pages[idx].icon} ${pages[idx].name}</div>
-                `).join('');
-                document.getElementById('approvedPages').innerHTML = approvedNodes;
-            } else {
-                document.getElementById('visualSummary').style.display = 'none';
-                document.getElementById('submitSection').style.display = 'none';
             }
         }
 
-        function submitForReview() {
-            const summary = pages
-                .map((p, idx) => `${idx + 1}. ${p.name}`)
-                .join('\n');
+        function renderTreeStructure() {
+            const tree = `EPICTOURS SITEMAP STRUCTURE
+════════════════════════════════════════════════════════
 
-            const message = `✓ SITEMAP APPROVED FOR REVIEW\n\nAll 13 pages approved:\n\n${summary}\n\n127 Total Sections\n95% GetYourGuide Alignment\n\nSubmitting for design and development kickoff...`;
+📍 HOMEPAGE
+
+🌍 DESTINATIONS HUB
+├─ 🗼 PARIS
+│  ├─ Top Sights (4 curator picks)
+│  ├─ Unique Experiences (4 local activities)
+│  └─ All Activities (searchable, filterable)
+│
+├─ 🚪 LONDON
+│  ├─ Top Sights (4 curator picks)
+│  ├─ Unique Experiences (4 local activities)
+│  └─ All Activities (searchable, filterable)
+│
+├─ 🏛️ ROME
+│  ├─ Top Sights (4 curator picks)
+│  ├─ Unique Experiences (4 local activities)
+│  └─ All Activities (searchable, filterable)
+│
+├─ 🗽 NEW YORK
+│  ├─ Top Sights (4 curator picks)
+│  ├─ Unique Experiences (4 local activities)
+│  └─ All Activities (searchable, filterable)
+│
+└─ 🎪 BARCELONA
+   ├─ Top Sights (4 curator picks)
+   ├─ Unique Experiences (4 local activities)
+   └─ All Activities (searchable, filterable)
+
+🎫 ACTIVITY DETAIL PAGE
+├─ Gallery (4+ photos, zoom capability)
+├─ Title & Rating
+├─ Itinerary (Timeline Format)
+├─ Inclusions/Exclusions (Checklist)
+├─ Reviews & Pricing
+└─ Sticky Mobile Footer (Price + Book Button)
+
+🔍 SEARCH & FILTERS PAGE
+├─ Sidebar Filters:
+│  ├─ Price Range Slider
+│  ├─ Duration Filter
+│  ├─ Time of Day Toggle
+│  └─ Language Selection
+├─ Interest Category Pills
+└─ Advanced Results Grid
+
+📝 BLOG & CONTENT HUB
+├─ Destination Guides (posts)
+├─ Local Experiences (posts)
+├─ Travel Tips (posts)
+└─ Expert Author Profiles (name, bio, social)
+
+❓ HELP & SUPPORT HUB
+├─ FAQ Section
+├─ Booking Guide
+├─ Cancellation Policy
+├─ Contact Support Form
+└─ Live Chat Widget
+
+🏢 ABOUT US
+└─ Company Info
+
+🤝 B2B PARTNERS
+└─ Affiliate & API Program
+
+════════════════════════════════════════════════════════
+✓ 22 Pages Total | 100+ Sections
+✓ Mobile-first Design
+✓ Touch-friendly Interface
+✓ Target Load Time: <3 seconds
+✓ 95% GetYourGuide Alignment`;
+
+            document.getElementById('treeView').textContent = tree;
+        }
+
+        function openResubmitModal() {
+            document.getElementById('resubmitModal').classList.add('show');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+
+        function submitResubmit() {
+            const desc = document.getElementById('changeDesc').value.trim();
+            if (!desc) {
+                alert('Please describe the changes');
+                return;
+            }
+            document.getElementById('successMsg').innerHTML = '✓ Changes submitted! Mubeena will review and update.';
+            document.getElementById('successMsg').classList.add('show');
+            document.getElementById('changeDesc').value = '';
+            closeModal('resubmitModal');
+            setTimeout(() => {
+                document.getElementById('successMsg').classList.remove('show');
+            }, 4000);
+        }
+
+        function submitForReview() {
+            const subject = 'Epic Tours - Website Sitemap - Approved';
+            const body = `Hi all,
+
+The following structure of the sitemap has been reviewed and approved by EpicTours:
+
+═══════════════════════════════════════════════════════════════════
+EPICTOURS SITEMAP - 22 PAGES | 100+ SECTIONS
+═══════════════════════════════════════════════════════════════════
+
+1. HOMEPAGE
+   • Hero Section, Featured Destinations, Call to Action
+
+2. DESTINATIONS HUB (5 Cities)
+   Each city includes 3-tier structure:
+   • Top Sights (4 curator picks, high-demand activities)
+   • Unique Experiences (4 local, niche activities)
+   • All Activities (searchable, filterable list)
+   
+   Cities: Paris, London, Rome, New York, Barcelona
+
+3. ACTIVITY DETAIL PAGE
+   • Gallery (4+ photos with zoom capability)
+   • Title & Rating
+   • Itinerary (Timeline Format - not paragraph)
+   • Inclusions/Exclusions (Checklist format)
+   • Pricing & Booking
+   • Reviews
+   • Sticky Mobile Footer (Price + Book Button)
+
+4. SEARCH & FILTERS PAGE
+   Sidebar Filters:
+   • Price Range Slider
+   • Duration Filter
+   • Time of Day Toggle
+   • Language Selection
+   • Interest Category Pills
+   • Advanced Results Grid with Sorting
+
+5. BLOG & CONTENT HUB
+   • Destination Guides (posts with SEO)
+   • Local Experiences (posts with SEO)
+   • Travel Tips (posts with SEO)
+   • Expert Author Profiles (Name, Bio, Social Links)
+
+6. HELP & SUPPORT HUB (NEW)
+   • FAQ Section
+   • Booking Guide
+   • Cancellation Policy
+   • Contact Support Form
+   • Live Chat Widget
+
+7. ABOUT US
+   • Company Mission, Team, Values, Leadership
+
+8. B2B PARTNERS
+   • Affiliate Program, Partner Benefits, API Documentation
+
+═══════════════════════════════════════════════════════════════════
+TECHNICAL SPECIFICATIONS:
+✓ Mobile-first Design
+✓ Sticky Navigation
+✓ Touch-friendly Filters (48px+ targets)
+✓ Fast Load Times (Target: <3 seconds)
+✓ 95% GetYourGuide Alignment
+✓ Responsive Across All Devices
+═══════════════════════════════════════════════════════════════════
+
+Ready to proceed with design and development kickoff.
+
+Best regards,
+Mubeena, Project Manager`;
+
+            const recipients = ['mubeena@digitalnexa.com', 'jatin@digitalnexa.com', 'sam@epicguidedtours.com'];
             
-            alert(message);
-            console.log('Submitted for review');
+            console.log('═══════════════════════════════════════');
+            console.log('EMAIL SUBMISSION');
+            console.log('═══════════════════════════════════════');
+            console.log('Subject:', subject);
+            console.log('To:', recipients.join(', '));
+            console.log('Body:', body);
+            
+            alert('✓ Sitemap submitted for review!\n\nEmail sent to:\n' + recipients.join('\n') + '\n\nSubject: ' + subject);
         }
 
         // Initialize
